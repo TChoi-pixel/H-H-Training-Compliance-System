@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RTO Self-Assurance & Compliance Monitoring System — H&H Accredited Training</title>
+<style>
+:root{
+  --navy:#18283f;
+  --navy2:#0f1b2d;
+  --paper:#f5f3ed;
+  --panel:#ffffff;
+  --ink:#1c2a3d;
+  --muted:#667085;
+  --line:#ddd8cc;
+  --gold:#b58a34;
+  --gold-soft:#f1e3c2;
+  --green:#2f6b4f;
+  --green-bg:#e7f1ea;
+  --amber:#9a6b15;
+  --amber-bg:#f7ecd4;
+  --red:#a13d35;
+  --red-bg:#f5e1de;
+  --blue:#345f8c;
+  --blue-bg:#e7eef6;
+  --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Georgia,serif;
+  --sans:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+header{
+  background:linear-gradient(180deg,var(--navy),var(--navy2));
+  color:#fff;
+  border-bottom:3px solid var(--gold);
+  padding:18px 16px 15px
+}
+.header-row{display:flex;align-items:center;gap:12px;max-width:1180px;margin:0 auto}
+.logo{height:42px;background:#fff;border-radius:6px;padding:4px 6px}
+.header-copy{flex:1;min-width:0}
+.kicker{font-size:11px;letter-spacing:.06em;color:var(--gold-soft);margin:0 0 3px}
+h1{font-family:var(--serif);font-size:20px;line-height:1.15;font-weight:600;margin:0}
+.sub{font-size:12.5px;color:#cbd3df;margin-top:4px}
+.badge{font-size:11px;border:1px solid rgba(255,255,255,.28);padding:4px 9px;border-radius:20px;color:#efe8d5;white-space:nowrap}
+nav{display:flex;overflow-x:auto;background:var(--navy2);scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{background:none;border:none;color:#aeb8c8;padding:12px 14px;font:13px var(--sans);white-space:nowrap;border-bottom:2px solid transparent;cursor:pointer}
+nav button.active{color:#fff;border-bottom-color:var(--gold)}
+main{max-width:1180px;margin:0 auto;padding:18px 16px 64px}
+.view{display:none}.view.active{display:block}
+.view-title{font-family:var(--serif);font-size:22px;margin:2px 0 3px;color:var(--navy)}
+.view-desc{font-size:13px;line-height:1.55;color:var(--muted);margin:0 0 16px}
+.grid{display:grid;gap:12px}
+.kpis{grid-template-columns:repeat(5,minmax(0,1fr));margin-bottom:16px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:5px;padding:12px}
+.kpi.bad{border-left-color:var(--red)} .kpi.warn{border-left-color:var(--amber)} .kpi.ok{border-left-color:var(--green)} .kpi.info{border-left-color:var(--blue)}
+.kpi .num{font-family:var(--serif);font-size:27px;line-height:1;color:var(--navy)}
+.kpi .label{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+.two{grid-template-columns:1.15fr .85fr}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:14px;margin-bottom:12px}
+.panel h3{font-family:var(--serif);font-size:16px;margin:0 0 4px;color:var(--navy)}
+.meta{font-size:11.5px;color:var(--muted);margin-bottom:9px;line-height:1.45}
+.row-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
+.btn{border:1px solid var(--line);background:#fff;color:var(--navy);padding:6px 10px;border-radius:4px;font-size:11.5px;cursor:pointer}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+.btn:hover{filter:brightness(.98)}
+.pill{display:inline-block;font-size:10.8px;padding:3px 8px;border-radius:20px;font-weight:600;white-space:nowrap}
+.pill.low,.pill.effective,.pill.closed,.pill.ready{background:var(--green-bg);color:var(--green)}
+.pill.medium,.pill.partial,.pill.progress,.pill.due{background:var(--amber-bg);color:var(--amber)}
+.pill.high,.pill.critical,.pill.ineffective,.pill.open,.pill.overdue{background:var(--red-bg);color:var(--red)}
+.pill.critical{background:#6b1f1a;color:#f3dedc}
+.pill.info,.pill.review{background:var(--blue-bg);color:var(--blue)}
+.pill.neutral{background:#ece9df;color:var(--muted)}
+.item{border:1px solid var(--line);border-radius:5px;padding:11px 12px;margin-bottom:8px;background:#fff}
+.item-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.item-title{font-size:13.5px;font-weight:650;color:var(--navy)}
+.item-sub{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
+.item-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:9px;font-size:11.5px;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:12px}
+th,td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top}
+th{background:#efebde;color:var(--navy);font-size:11px;font-weight:650}
+td.code{font-weight:650;white-space:nowrap}
+.scroll{overflow-x:auto}
+.progress{height:7px;background:#ebe7db;border-radius:5px;overflow:hidden}
+.fill{height:100%;background:var(--gold)}
+.bar-row{margin-bottom:11px}
+.bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.notice{border-left:4px solid var(--blue);background:#f6f8fb;padding:10px 12px;font-size:12px;line-height:1.5;margin-bottom:12px}
+.form{display:none;border:1px dashed var(--line);padding:11px;border-radius:5px;background:#fbfaf6;margin-bottom:12px}
+.form.open{display:block}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.form label{font-size:11px;color:var(--muted);display:block;margin:5px 0 2px}
+.form input,.form select,.form textarea{width:100%;border:1px solid var(--line);border-radius:4px;padding:7px 8px;font:12px var(--sans);background:#fff;color:var(--ink)}
+.form textarea{min-height:68px;resize:vertical}
+.control-note{font-size:10.8px;color:var(--muted);line-height:1.45}
+.heat-high{background:#f9e7e4}.heat-med{background:#fbf3df}.heat-low{background:#edf5ef}
+.footnote{font-size:10.8px;color:var(--muted);line-height:1.55;border-top:1px solid var(--line);margin-top:24px;padding-top:13px}
+@media (max-width:920px){.kpis{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.badge{display:none}}
+@media (max-width:620px){.form-grid{grid-template-columns:1fr}.header-row{align-items:flex-start}.logo{height:36px}h1{font-size:18px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-row">
+    <img class="logo" src="https://hnh.edu.au/wp-content/uploads/2024/06/hnh-logo-bg.png" alt="H&H Accredited Training logo" onerror="this.style.display='none'">
+    <div class="header-copy">
+      <p class="kicker">GOVERNANCE · RISK · COMPLIANCE · SELF-ASSURANCE</p>
+      <h1>RTO Self-Assurance & Compliance Monitoring System</h1>
+      <div class="sub">Interview demonstration — H&H Accredited Training · RTO 45704 · sample data only</div>
+    </div>
+    <div class="badge">2025 Standards + Smart and Skilled 2026–27</div>
+  </div>
+</header>
+
+<nav id="tabs">
+  <button class="active" data-view="dashboard">Executive Dashboard</button>
+  <button data-view="obligations">Obligations</button>
+  <button data-view="risks">Risk & Controls</button>
+  <button data-view="assurance">Assurance Program</button>
+  <button data-view="validation">Assessment & Validation</button>
+  <button data-view="workforce">Workforce Assurance</button>
+  <button data-view="student">Student Journey</button>
+  <button data-view="smartskilled">Smart &amp; Skilled</button>
+  <button data-view="thirdparty">Third Parties</button>
+  <button data-view="actions">Actions & CI</button>
+  <button data-view="regulatory">Regulatory Change</button>
+  <button data-view="evidence">Evidence</button>
+  <button data-view="standards">Standards Map</button>
+</nav>
+
+<main>
+
+<section class="view active" id="view-dashboard">
+  <h2 class="view-title">Executive compliance assurance overview</h2>
+  <p class="view-desc">Management view of material compliance risks, control effectiveness, overdue remediation, validation exposure and regulatory implementation status. Indicators are internal management measures only — not ASQA ratings.</p>
+  <div class="grid kpis" id="kpiGrid"></div>
+
+  <div class="grid two">
+    <div class="panel">
+      <h3>Residual risk profile</h3>
+      <div class="meta">Calculated from current risk ratings and control-effectiveness assessments.</div>
+      <div id="riskBars"></div>
+    </div>
+    <div class="panel">
+      <h3>Management attention</h3>
+      <div class="meta">Items requiring escalation, remediation or evidence of closure.</div>
+      <div id="attentionList"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Self-assurance cycle</h3>
+    <div class="meta">The operating model used throughout this system.</div>
+    <div class="notice"><strong>Obligation → Risk → Control → Evidence → Monitoring → Finding → Corrective Action → Effectiveness Review → Continuous Improvement</strong></div>
+    <div class="control-note">A control is not treated as effective merely because a policy exists. Assurance is based on whether the control operates in practice and whether evidence supports the intended outcome.</div>
+  </div>
+</section>
+
+<section class="view" id="view-obligations">
+  <div class="row-head">
+    <div><h2 class="view-title">Compliance obligations register</h2><p class="view-desc">Central register of regulatory, funding-contract and governance obligations mapped to accountable owners and assurance evidence.</p></div>
+    <button class="btn primary" onclick="toggle('form-obligation')">+ Add obligation</button>
+  </div>
+  <div class="form" id="form-obligation">
+    <div class="form-grid">
+      <div><label>Framework / source</label><input id="o-source" placeholder="e.g. 2025 Outcome Standards"></div>
+      <div><label>Reference</label><input id="o-ref" placeholder="e.g. Standard 1.5"></div>
+      <div><label>Obligation</label><input id="o-title" placeholder="Short requirement statement"></div>
+      <div><label>Owner</label><input id="o-owner" placeholder="e.g. Compliance Manager"></div>
+    </div>
+    <div style="margin-top:8px"><button class="btn primary" onclick="addObligation()">Add</button></div>
+  </div>
+  <div class="scroll"><table><thead><tr><th>Framework</th><th>Reference</th><th>Obligation</th><th>Owner</th><th>Assurance evidence</th><th>Status</th></tr></thead><tbody id="obligationBody"></tbody></table></div>
+</section>
+
+<section class="view" id="view-risks">
+  <div class="row-head">
+    <div><h2 class="view-title">Risk & controls register</h2><p class="view-desc">Links material RTO compliance risks to preventive/detective controls, accountable owners, control effectiveness and residual risk.</p></div>
+    <button class="btn primary" onclick="toggle('form-risk')">+ Add risk</button>
+  </div>
+  <div class="notice"><strong>Risk methodology:</strong> inherent risk = likelihood (1–5) × consequence (1–5), banded Low / Medium / High / Critical. Residual risk applies an internal control-effectiveness adjustment — Effective moves the band down two levels, Partially Effective one level, Ineffective leaves it unchanged. This is an internal prioritisation tool, not an ASQA-prescribed scoring model.</div>
+  <div class="form" id="form-risk">
+    <div class="form-grid">
+      <div><label>Risk</label><input id="r-title"></div>
+      <div><label>Owner</label><input id="r-owner"></div>
+      <div><label>Likelihood (1 rare – 5 almost certain)</label><select id="r-like"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+      <div><label>Consequence (1 minor – 5 severe)</label><select id="r-conseq"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+      <div><label>Control effectiveness</label><select id="r-effect"><option>Effective</option><option>Partially Effective</option><option>Ineffective</option></select></div>
+    </div>
+    <label>Key control</label><input id="r-control">
+    <div style="margin-top:8px"><button class="btn primary" onclick="addRisk()">Add</button></div>
+  </div>
+  <div id="riskList"></div>
+</section>
+
+<section class="view" id="view-assurance">
+  <h2 class="view-title">Risk-based internal assurance program</h2>
+  <p class="view-desc">Schedules assurance work according to material risk, regulatory change, complaints, validation findings, delivery changes and other triggers — not simply a fixed annual checklist.</p>
+  <div class="scroll"><table><thead><tr><th>Assurance activity</th><th>Scope / trigger</th><th>Owner</th><th>Due</th><th>Risk basis</th><th>Status</th></tr></thead><tbody id="assuranceBody"></tbody></table></div>
+</section>
+
+<section class="view" id="view-validation">
+  <h2 class="view-title">Assessment & validation assurance</h2>
+  <p class="view-desc">Risk-based monitoring of assessment quality and validation. Internal planned dates can be earlier than the regulatory maximum. Every training product must be validated at least once every five years, with frequency and sample size adjusted for risk and change.</p>
+  <div class="notice"><strong>Control principle:</strong> the five-year period is a maximum interval, not a default operational cycle. Earlier validation should be triggered by material risk, assessment changes, poor outcomes, complaints, trainer feedback or training-product change.</div>
+  <div class="scroll"><table><thead><tr><th>Training product</th><th>Scope</th><th>Last validation</th><th>Statutory latest</th><th>Planned review</th><th>Risk / trigger</th><th>Status</th></tr></thead><tbody id="validationBody"></tbody></table></div>
+</section>
+
+<section class="view" id="view-workforce">
+  <h2 class="view-title">Trainer, assessor & validator assurance</h2>
+  <p class="view-desc">Evidence that workforce requirements are actively monitored rather than checked only at recruitment or audit time.</p>
+  <div class="scroll"><table><thead><tr><th>Control area</th><th>What is monitored</th><th>Evidence</th><th>Frequency</th><th>Status</th></tr></thead><tbody id="workforceBody"></tbody></table></div>
+</section>
+
+<section class="view" id="view-student">
+  <h2 class="view-title">Student journey assurance</h2>
+  <p class="view-desc">End-to-end assurance from marketing and pre-enrolment through support, assessment, complaints, completion and certification.</p>
+  <div class="scroll"><table><thead><tr><th>Stage</th><th>Key risk</th><th>Control</th><th>Evidence</th><th>Status</th></tr></thead><tbody id="studentBody"></tbody></table></div>
+</section>
+
+<section class="view" id="view-smartskilled">
+  <h2 class="view-title">Smart &amp; Skilled assurance</h2>
+  <p class="view-desc">Funding &amp; contract compliance for NSW Government-subsidised training, tracked separately from ASQA regulatory compliance — the two frameworks have different legal bases and shouldn't be blended, even though a gap in one can create risk in the other.</p>
+  <div class="notice"><strong>Two frameworks, tracked side by side:</strong> Regulatory compliance runs through ASQA / the 2025 Standards / Credential Policy (Obligations, Risk &amp; Controls, Validation, Workforce, Standards Map). Funding &amp; contract compliance runs through the NSW Smart and Skilled Operating Guidelines, Contract Terms and Conditions and Student Eligibility Policy — current for the 2026–27 activity period — tracked here. H&amp;H's website identifies the RTO as a Smart and Skilled approved provider, which is why this demonstration includes a separate funding and contract assurance layer alongside ASQA regulatory assurance. Specific funded qualifications should be confirmed against current Smart and Skilled approval and Skills NSW information — H&amp;H's own published pages aren't fully internally consistent on this (its course list and its fees/funding page use slightly different qualification codes for the same course), so this isn't a case where the site alone settles it.</div>
+  <div class="scroll"><table><thead><tr><th>Control area</th><th>What is monitored</th><th>Evidence</th><th>Framework document</th><th>Status</th></tr></thead><tbody id="smartSkilledBody"></tbody></table></div>
+  <p class="control-note" style="margin-top:8px;">Framework references are drawn from published NSW Government policy summaries current as of September 2026. Confirm exact clause wording against the live 2026–27 Operating Guidelines, Contract Terms and Conditions and Student Eligibility Policy before operational use.</p>
+</section>
+
+<section class="view" id="view-thirdparty">
+  <h2 class="view-title">Third-party oversight</h2>
+  <p class="view-desc">Due diligence, written arrangements, ongoing monitoring and escalation of third-party delivery or services affecting RTO obligations.</p>
+  <div class="scroll"><table><thead><tr><th>Arrangement</th><th>Risk</th><th>Monitoring control</th><th>Owner</th><th>Next review</th><th>Status</th></tr></thead><tbody id="thirdPartyBody"></tbody></table></div>
+</section>
+
+<section class="view" id="view-actions">
+  <div class="row-head">
+    <div><h2 class="view-title">Corrective actions & continuous improvement</h2><p class="view-desc">Tracks findings through root-cause analysis, remediation, closure and effectiveness review. Closing an action does not automatically prove the control is effective.</p></div>
+    <button class="btn primary" onclick="toggle('form-action')">+ Add action</button>
+  </div>
+  <div class="form" id="form-action">
+    <div class="form-grid">
+      <div><label>Action</label><input id="a-title"></div>
+      <div><label>Owner</label><input id="a-owner"></div>
+      <div><label>Due date</label><input type="date" id="a-date"></div>
+      <div><label>Source</label><input id="a-source" placeholder="Audit / validation / complaint / change"></div>
+    </div>
+    <div style="margin-top:8px"><button class="btn primary" onclick="addAction()">Add</button></div>
+  </div>
+  <div id="actionList"></div>
+</section>
+
+<section class="view" id="view-regulatory">
+  <h2 class="view-title">Regulatory change register</h2>
+  <p class="view-desc">Tracks changes from identification through impact assessment, implementation, communication and evidence of completion.</p>
+  <div id="regList"></div>
+</section>
+
+<section class="view" id="view-evidence">
+  <h2 class="view-title">Evidence & assurance register</h2>
+  <p class="view-desc">Evidence is linked to obligations and controls so management can demonstrate not only that a document exists, but that the control operates and supports the required outcome.</p>
+  <div class="panel"><div class="meta" id="evidenceLabel"></div><div class="progress"><div class="fill" id="evidenceProgress"></div></div></div>
+  <div id="evidenceList"></div>
+</section>
+
+<section class="view" id="view-standards">
+  <h2 class="view-title">Framework & standards map</h2>
+  <p class="view-desc">High-level mapping of this self-assurance system to the 2025 Standards for RTOs and the current Smart and Skilled 2026–27 activity period.</p>
+
+  <div class="panel">
+    <h3>2025 Standards for RTOs</h3>
+    <div class="meta">Effective 1 July 2025. This demo uses the current outcome-focused, self-assurance approach rather than legacy 2015 clause numbering.</div>
+    <div class="scroll"><table>
+      <thead><tr><th>Component</th><th>Focus</th><th>System coverage</th></tr></thead>
+      <tbody>
+        <tr><td class="code">Outcome Standards</td><td>Training and assessment, student support, workforce, governance and quality outcomes.</td><td>Risk & Controls · Assurance Program · Validation · Workforce · Student Journey · Actions & CI</td></tr>
+        <tr><td class="code">Compliance Standards</td><td>Administrative, registration, recordkeeping, information, transparency and related enforceable obligations.</td><td>Obligations · Evidence · Regulatory Change</td></tr>
+        <tr><td class="code">Credential Policy</td><td>Required training-and-assessment credentials for trainers, assessors and persons conducting validation.</td><td>Workforce Assurance · Validation · Evidence</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <h3>Outcome Standards quality areas</h3>
+    <div class="scroll"><table>
+      <thead><tr><th>Quality area</th><th>Self-assurance focus</th><th>Key modules</th></tr></thead>
+      <tbody>
+        <tr><td class="code">QA1 — Training & Assessment</td><td>Training suitability, assessment integrity, validation and evidence of competence.</td><td>Validation · Assurance Program · Actions & CI</td></tr>
+        <tr><td class="code">QA2 — Student Support</td><td>Information, support, wellbeing, complaints/appeals and appropriate student experience.</td><td>Student Journey · Evidence</td></tr>
+        <tr><td class="code">QA3 — VET Workforce</td><td>Vocational competence, industry relevance, currency and ongoing capability.</td><td>Workforce Assurance · Evidence</td></tr>
+        <tr><td class="code">QA4 — Governance</td><td>Leadership, accountability, risk management, monitoring and continuous improvement.</td><td>Executive Dashboard · Risk & Controls · Regulatory Change · Actions & CI</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="panel">
+    <h3>Smart and Skilled — 2026–27 activity period</h3>
+    <div class="meta">Funding &amp; contract compliance, tracked separately from ASQA regulatory compliance — see the dedicated Smart &amp; Skilled tab for the full control set (eligibility, NOE, USI, fees, consumer information, activity data, claims, third-party/brokering, record retention).</div>
+    <div class="notice">This demonstration maps funded-training obligations at a high level only. Before operational use, specific obligations should be verified against the current 2026–27 Operating Guidelines, Student Eligibility Policy, Contract Terms and Conditions and any applicable program-specific rules.</div>
+  </div>
+</section>
+
+<div class="footnote">
+  Demonstration system only. Sample records are illustrative and must not be treated as evidence of H&H Accredited Training's actual compliance status, scope, controls or findings. Internal indicators are management tools rather than regulator-issued ratings. Regulatory and contractual requirements should always be checked against the current official ASQA and NSW Government instruments before operational reliance. <strong>Session-based demonstration</strong> — all entries and status changes are held in browser memory only and reset on refresh; nothing is saved to a server or database.
+</div>
+</main>
+
+<script>
+const TODAY = new Date('2026-09-14');
+
+let obligations = [
+  {source:'2025 Outcome Standards', ref:'Standard 1.5', title:'Maintain risk-based validation of training products and assessment practice.', owner:'Compliance Manager', evidence:'Validation plan, samples, reports, rectification', status:'Implemented'},
+  {source:'Credential Policy', ref:'Section 3 — validation credentials', title:'For non-TAE training products, at least one person undertaking validation must hold a permitted validation credential; the validation team must also meet Standard 1.5\'s competency and industry-relevance requirements.', owner:'Compliance / HR', evidence:'Credential files, matrices, currency evidence', status:'Implemented'},
+  {source:'2025 Outcome Standards', ref:'Quality Area 4', title:'Maintain governance, risk management, monitoring and continuous improvement arrangements.', owner:'CEO / Compliance', evidence:'Risk register, assurance plan, management reviews, CI log', status:'Implemented'},
+  {source:'Smart and Skilled', ref:'Operating Guidelines 2026–27', title:'Keep funded-training enrolment (NOE, USI), consumer information and delivery practices aligned to the current Operating Guidelines.', owner:'Operations / Compliance', evidence:'NOE records, USI verification, marketing review', status:'Review'},
+  {source:'Smart and Skilled', ref:'Contract Terms & Conditions 2026–27', title:'Meet contractual obligations for claims, record retention, third-party/brokering and withdrawal/deferral handling.', owner:'Operations / Compliance', evidence:'Claim reconciliation, brokering approvals, deferral records', status:'Review'},
+  {source:'Smart and Skilled', ref:'Student Eligibility Policy 2026–27', title:'Verify and evidence student eligibility against the current activity-period criteria at enrolment.', owner:'Operations / Compliance', evidence:'Eligibility declarations, student file sample', status:'Implemented'}
+];
+
+let risks = [
+  {id:1, title:'Invalid or inconsistent assessment decisions', owner:'Compliance / Academic Lead', like:4, conseq:4, control:'Risk-based validation plan, assessment review and rectification process', effect:'Partially Effective'},
+  {id:2, title:'Trainer/assessor credentials or industry relevance not current', owner:'HR / Compliance', like:4, conseq:4, control:'Credential matrix, pre-engagement verification and periodic currency review', effect:'Effective'},
+  {id:3, title:'Student support needs not identified or addressed consistently', owner:'Student Services', like:2, conseq:3, control:'Support-needs screening, referral process and support record monitoring', effect:'Effective'},
+  {id:4, title:'Regulatory change not implemented on time', owner:'Compliance Manager', like:4, conseq:5, control:'Regulatory change register with impact assessment, owner and due date', effect:'Effective'},
+  {id:5, title:'Third-party activity creates unmonitored compliance exposure', owner:'CEO / Compliance', like:4, conseq:5, control:'Due diligence, written agreement, KPI monitoring, periodic assurance review', effect:'Partially Effective'}
+];
+
+let assurance = [
+  {activity:'CHC33021 assessment assurance review', scope:'Triggered by prior mapping issue and validation due status', owner:'Compliance Officer', due:'2026-09-18', risk:'High', status:'In Progress'},
+  {activity:'Trainer credential & currency sample review', scope:'Quarterly control effectiveness test', owner:'Compliance / HR', due:'2026-09-22', risk:'Medium', status:'Scheduled'},
+  {activity:'Student file end-to-end sample', scope:'Eligibility, enrolment, support, assessment and certification evidence', owner:'Compliance Officer', due:'2026-10-10', risk:'Medium', status:'Scheduled'},
+  {activity:'Third-party monitoring review', scope:'Agreement, performance, evidence and issue escalation', owner:'CEO / Compliance', due:'2026-10-05', risk:'High', status:'Scheduled'}
+];
+
+let validations = [
+  {product:'CHC30125', scope:'Certificate III in Early Childhood Education and Care', last:'2025-11-10', latest:'2030-11-10', planned:'2026-11-10', trigger:'Annual internal risk review', status:'On track'},
+  {product:'CHC33021', scope:'Certificate III in Individual Support', last:'2024-06-02', latest:'2029-06-02', planned:'2026-09-20', trigger:'Assessment mapping issue / elevated risk', status:'Due soon'},
+  {product:'BSB50120', scope:'Diploma of Business', last:'2025-01-20', latest:'2030-01-20', planned:'2027-01-20', trigger:'Routine risk-based cycle', status:'On track'},
+  {product:'CHC52025', scope:'Diploma of Community Services', last:'2026-07-01', latest:'2031-07-01', planned:'2027-07-01', trigger:'New/revised product monitoring', status:'On track'}
+];
+
+let workforce = [
+  {area:'Trainer & assessor credentials', monitor:'Credential validity and alignment to delivery/assessment role', evidence:'Verified qualifications, TAE credentials, matrix', freq:'At engagement + periodic review', status:'Ready'},
+  {area:'Industry relevance', monitor:'Current industry skills and knowledge relevant to training product', evidence:'Industry engagement, work evidence, PD records', freq:'Risk-based / annual review', status:'Ready'},
+  {area:'Professional development', monitor:'VET knowledge, training/assessment practice and industry development', evidence:'PD plan and completed activities', freq:'Ongoing', status:'Review'},
+  {area:'Validator requirements', monitor:'Collective competency/current-industry requirements and required validation credentials', evidence:'Validator matrix and credential evidence', freq:'Before each validation activity', status:'Ready'}
+];
+
+let student = [
+  {stage:'Marketing / pre-enrolment', risk:'Misleading or incomplete information', control:'Publication review and approval', evidence:'Website review, marketing checklist, approvals', status:'Effective'},
+  {stage:'Eligibility / enrolment', risk:'Ineligible enrolment or incomplete evidence', control:'Eligibility checklist and evidence verification', evidence:'Student file sample, NOE/eligibility records', status:'Effective'},
+  {stage:'Support', risk:'Needs not identified or support not implemented', control:'Support-needs screening and case records', evidence:'Support plans, referrals, contact notes', status:'Effective'},
+  {stage:'Assessment', risk:'Invalid assessment or insufficient evidence', control:'Assessment governance and validation', evidence:'Completed samples, validation findings, moderation', status:'Partially Effective'},
+  {stage:'Complaints & appeals', risk:'Process not followed consistently', control:'Register, timeframes, escalation and review', evidence:'Case files, outcomes, trend analysis', status:'Effective'},
+  {stage:'Certification', risk:'Incorrect or unsupported certification', control:'Completion verification prior to issuance', evidence:'Completion checklist, AQF documents, issuance records', status:'Effective'}
+];
+
+let smartSkilled = [
+  {area:'Student eligibility', monitor:'Student meets current Smart and Skilled eligibility criteria at enrolment', evidence:'Eligibility evidence / declaration on student file', framework:'Student Eligibility Policy 2026–27', status:'Ready'},
+  {area:'Notification of Enrolment (NOE)', monitor:'NOE process completed before training commences', evidence:'NOE record (provider + student copy)', framework:'Operating Guidelines 2026–27', status:'Ready'},
+  {area:'USI', monitor:'Student holds a valid USI; access-control consent obtained', evidence:'USI verification record', framework:'Operating Guidelines 2026–27', status:'Ready'},
+  {area:'Fee determination', monitor:'Student fee and any concession/exemption determined correctly under the current Fee Administration Policy and applicable Smart and Skilled pricing arrangements', evidence:'Fee determination record / invoice / concession or exemption evidence', framework:'Fee Administration Policy 2026–27', status:'Review'},
+  {area:'Consumer information', monitor:'Marketing and enrolment materials acknowledge NSW Government subsidy, avoid implying free/discounted training, and link to the Smart and Skilled website', evidence:'Website review, marketing checklist', framework:'Operating Guidelines 2026–27 — consumer protection', status:'Review'},
+  {area:'Evidence of participation', monitor:'Attendance/participation evidence supports reported training activity', evidence:'Attendance records, SMS/LMS logs, trainer records', framework:'Operating Guidelines 2026–27', status:'Ready'},
+  {area:'Training activity data', monitor:'AVETMISS-compliant training activity data submitted accurately and on time', evidence:'STS Online / eReporting extract, reconciliation', framework:'Smart and Skilled eReporting Specifications', status:'Ready'},
+  {area:'Withdrawals & deferrals', monitor:'Deferrals, withdrawals and discontinuations managed and reported in accordance with current Smart and Skilled requirements', evidence:'Student records, deferral notices', framework:'Operating Guidelines 2026–27', status:'Ready'},
+  {area:'Third-party / brokering', monitor:'Any third-party or brokering arrangement complies with applicable Smart and Skilled approval, contractual and monitoring requirements', evidence:'Approval/authorisation where required, written arrangement, monitoring evidence', framework:'Third Party (Brokering) Approval Policy', status:'Ready'},
+  {area:'Claims & payments', monitor:'Funding claims reconcile against actual delivery and participation evidence', evidence:'Claim reconciliation records', framework:'Contract Terms & Conditions 2026–27', status:'Review'},
+  {area:'Record retention', monitor:'Funded-program records retained for the required contractual period', evidence:'Evidence register / archive index', framework:'Contract Terms & Conditions 2026–27', status:'Ready'},
+  {area:'Contract change monitoring', monitor:'2026–27 policy/guideline changes impact-assessed and implemented', evidence:'Regulatory change log entry', framework:'Regulatory Change register (cross-reference)', status:'Ready'}
+];
+
+let thirdParty = [
+  {arr:'External trainer / delivery arrangement', risk:'Delivery does not meet RTO requirements', control:'Due diligence + contract + observation/file sampling', owner:'CEO / Compliance', review:'2026-10-05', status:'Review'},
+  {arr:'Work placement host network', risk:'Placement environment or supervision unsuitable', control:'Host approval, agreements and placement monitoring', owner:'Operations', review:'2026-11-15', status:'Ready'}
+];
+
+let actions = [
+  {id:1,title:'Update CHC33021 assessment mapping and re-test amended tool',owner:'Lead Trainer',date:'2026-09-20',source:'Validation / assessment assurance',status:'Open',effectiveness:'Pending'},
+  {id:2,title:'Refresh trainer matrix with current vocational currency evidence',owner:'HR / Compliance',date:'2026-09-22',source:'Workforce assurance',status:'In Progress',effectiveness:'Pending'},
+  {id:3,title:'Review third-party monitoring evidence against current governance controls',owner:'CEO / Compliance',date:'2026-10-05',source:'Risk register',status:'Open',effectiveness:'Pending'},
+  {id:4,title:'Close student-file evidence gap identified in prior review',owner:'Admin Team',date:'2026-08-15',source:'Internal assurance',status:'Closed',effectiveness:'Effective'}
+];
+
+let regulatory = [
+  {source:'ASQA',title:'2025 Standards for RTOs',text:'Current RTO regulatory framework in effect from 1 July 2025. Internal tools should use current Outcome Standards, Compliance Standards and Credential Policy rather than legacy 2015 clause references.',status:'Implemented'},
+  {source:'NSW Department of Education',title:'Smart and Skilled Operating Guidelines — 2026–27',text:'Current activity-period requirements should be used for funded-training controls, evidence testing and operational checklists.',status:'In Review'},
+  {source:'NSW Department of Education',title:'Smart and Skilled Student Eligibility Policy — 2026–27',text:'Current eligibility policy is already operative for the 2026–27 activity period. Enrolment controls should be checked against current requirements.',status:'Implemented'},
+  {source:'Training.gov.au',title:'Training product / package change monitoring',text:'Assess training-product changes for impact on scope, assessment tools, TAS/delivery documentation, transition planning and validation priorities.',status:'Ongoing'}
+];
+
+let evidence = [
+  {label:'Current registration and scope evidence',tag:'Compliance Standards',done:true},
+  {label:'Risk register with accountable owners and residual-risk ratings',tag:'QA4 Governance',done:true},
+  {label:'Internal assurance plan linked to material risks',tag:'QA4 Governance',done:true},
+  {label:'Validation plan, samples, findings and rectification evidence',tag:'QA1 / Standard 1.5',done:false,note:'CHC33021 assurance work in progress'},
+  {label:'Trainer/assessor/validator credential and currency evidence',tag:'QA3 / Credential Policy',done:true},
+  {label:'Student support, complaints and appeals operating evidence',tag:'QA2',done:true},
+  {label:'Third-party due diligence, agreement and monitoring evidence',tag:'QA4',done:false,note:'Review scheduled'},
+  {label:'Corrective action closure + effectiveness review evidence',tag:'Continuous Improvement',done:false,note:'Two items pending effectiveness testing'},
+  {label:'Smart and Skilled 2026–27 eligibility and enrolment evidence sample',tag:'NSW funded training',done:true},
+  {label:'Regulatory change impact assessments and implementation records',tag:'Regulatory Change',done:true}
+];
+
+function d(date){return new Date(date)}
+function days(date){return Math.round((d(date)-TODAY)/(1000*60*60*24))}
+function fmt(date){return d(date).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'})}
+function pill(text, cls){return `<span class="pill ${cls}">${text}</span>`}
+function riskClass(v){return v.toLowerCase().replaceAll(' ','')}
+
+const RISK_BANDS = ['Low','Medium','High','Critical'];
+function inherentBand(r){
+  const score = r.like * r.conseq;
+  if(score>=15) return 'Critical';
+  if(score>=9) return 'High';
+  if(score>=4) return 'Medium';
+  return 'Low';
+}
+function residualBand(r){
+  const idx = RISK_BANDS.indexOf(inherentBand(r));
+  const drop = r.effect==='Effective' ? 2 : (r.effect==='Partially Effective' ? 1 : 0);
+  return RISK_BANDS[Math.max(0, idx-drop)];
+}
+function statusPill(v){
+  const s=v.toLowerCase();
+  if(['effective','implemented','ready','closed','on track'].includes(s)) return pill(v,'effective');
+  if(['partially effective','in progress','in review','review','due soon','ongoing','scheduled'].includes(s)) return pill(v,'partial');
+  if(['ineffective','open','overdue','high','critical'].includes(s)) return pill(v,'open');
+  return pill(v,'neutral');
+}
+function toggle(id){document.getElementById(id).classList.toggle('open')}
+
+document.getElementById('tabs').addEventListener('click',e=>{
+  if(e.target.tagName!=='BUTTON') return;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  e.target.classList.add('active');
+  document.getElementById('view-'+e.target.dataset.view).classList.add('active');
+});
+
+function renderDashboard(){
+  const high = risks.filter(r=>['High','Critical'].includes(residualBand(r))).length;
+  const overdue = actions.filter(a=>a.status!=='Closed' && days(a.date)<0).length;
+  const partial = risks.filter(r=>r.effect!=='Effective').length;
+  const validationRisk = validations.filter(v=>v.status==='Due soon'||v.status==='Overdue').length;
+  const regPending = regulatory.filter(r=>!['Implemented'].includes(r.status)).length;
+  const ssExceptions = smartSkilled.filter(s=>s.status!=='Ready').length;
+
+  const items=[
+    [high,'High / critical residual risks',high?'bad':'ok'],
+    [overdue,'Overdue corrective actions',overdue?'bad':'ok'],
+    [partial,'Controls needing effectiveness attention',partial?'warn':'ok'],
+    [validationRisk,'Validation items due / elevated risk',validationRisk?'warn':'ok'],
+    [regPending,'Regulatory items not fully implemented',regPending?'warn':'ok'],
+    [ssExceptions,'Smart & Skilled exceptions',ssExceptions?'warn':'ok']
+  ];
+  document.getElementById('kpiGrid').innerHTML=items.map(x=>`<div class="kpi ${x[2]}"><div class="num">${x[0]}</div><div class="label">${x[1]}</div></div>`).join('');
+
+  const counts={Low:0,Medium:0,High:0,Critical:0};
+  risks.forEach(r=>{const b=residualBand(r); counts[b]=(counts[b]||0)+1;});
+  const max=Math.max(1,...Object.values(counts));
+  document.getElementById('riskBars').innerHTML=['Critical','High','Medium','Low'].map(k=>{
+    const pct=Math.round(counts[k]/max*100);
+    return `<div class="bar-row"><div class="bar-label"><span>${k}</span><span>${counts[k]}</span></div><div class="progress"><div class="fill" style="width:${pct}%"></div></div></div>`;
+  }).join('');
+
+  let att=[];
+  risks.filter(r=>['High','Critical'].includes(residualBand(r))).forEach(r=>att.push(`<div class="item"><div class="item-title">${r.title}</div><div class="item-sub">Residual risk: ${residualBand(r)} · Control: ${r.effect}</div></div>`));
+  actions.filter(a=>a.status!=='Closed'&&days(a.date)<0).forEach(a=>att.push(`<div class="item"><div class="item-title">Overdue action: ${a.title}</div><div class="item-sub">Owner: ${a.owner}</div></div>`));
+  smartSkilled.filter(s=>s.status!=='Ready').forEach(s=>att.push(`<div class="item"><div class="item-title">Smart & Skilled exception: ${s.area}</div><div class="item-sub">${s.monitor}</div></div>`));
+  if(!att.length) att.push('<div class="item-sub">No material escalations at present.</div>');
+  document.getElementById('attentionList').innerHTML=att.join('');
+}
+
+function renderObligations(){
+  document.getElementById('obligationBody').innerHTML=obligations.map(o=>`<tr><td>${o.source}</td><td class="code">${o.ref}</td><td>${o.title}</td><td>${o.owner}</td><td>${o.evidence}</td><td>${statusPill(o.status)}</td></tr>`).join('');
+}
+function addObligation(){
+  const source=document.getElementById('o-source').value.trim(), ref=document.getElementById('o-ref').value.trim(), title=document.getElementById('o-title').value.trim(), owner=document.getElementById('o-owner').value.trim();
+  if(!source||!title) return alert('Please enter at least the framework and obligation.');
+  obligations.push({source,ref:ref||'—',title,owner:owner||'Unassigned',evidence:'To be defined',status:'Review'});
+  ['o-source','o-ref','o-title','o-owner'].forEach(id=>document.getElementById(id).value='');
+  toggle('form-obligation'); renderAll();
+}
+
+function renderRisks(){
+  document.getElementById('riskList').innerHTML=risks.map(r=>{
+    const inh=inherentBand(r), res=residualBand(r);
+    const heatCls = res==='Critical'||res==='High'?'heat-high':res==='Medium'?'heat-med':'heat-low';
+    return `<div class="item ${heatCls}">
+    <div class="item-top"><div><div class="item-title">${r.title}</div><div class="item-sub">Owner: ${r.owner}<br><strong>Key control:</strong> ${r.control}</div></div>${pill('Residual '+res,res.toLowerCase())}</div>
+    <div class="item-foot"><span>Inherent risk: ${inh} (L${r.like} × C${r.conseq} = ${r.like*r.conseq})</span><span>Control effectiveness: ${statusPill(r.effect)}</span></div>
+  </div>`;
+  }).join('');
+}
+function addRisk(){
+  const title=document.getElementById('r-title').value.trim(),owner=document.getElementById('r-owner').value.trim();
+  const like=Number(document.getElementById('r-like').value), conseq=Number(document.getElementById('r-conseq').value);
+  const effect=document.getElementById('r-effect').value,control=document.getElementById('r-control').value.trim();
+  if(!title||!control) return alert('Please enter the risk and key control.');
+  risks.push({id:Date.now(),title,owner:owner||'Unassigned',like,conseq,control,effect});
+  ['r-title','r-owner','r-control'].forEach(id=>document.getElementById(id).value=''); toggle('form-risk'); renderAll();
+}
+
+function renderAssurance(){
+  document.getElementById('assuranceBody').innerHTML=assurance.map(a=>`<tr><td>${a.activity}</td><td>${a.scope}</td><td>${a.owner}</td><td>${fmt(a.due)}</td><td>${pill(a.risk,a.risk.toLowerCase())}</td><td>${statusPill(a.status)}</td></tr>`).join('');
+}
+function renderValidation(){
+  document.getElementById('validationBody').innerHTML=validations.map(v=>`<tr><td class="code">${v.product}</td><td>${v.scope}</td><td>${fmt(v.last)}</td><td>${fmt(v.latest)}</td><td>${fmt(v.planned)}</td><td>${v.trigger}</td><td>${statusPill(v.status)}</td></tr>`).join('');
+}
+function renderWorkforce(){
+  document.getElementById('workforceBody').innerHTML=workforce.map(w=>`<tr><td>${w.area}</td><td>${w.monitor}</td><td>${w.evidence}</td><td>${w.freq}</td><td>${statusPill(w.status)}</td></tr>`).join('');
+}
+function renderStudent(){
+  document.getElementById('studentBody').innerHTML=student.map(s=>`<tr><td>${s.stage}</td><td>${s.risk}</td><td>${s.control}</td><td>${s.evidence}</td><td>${statusPill(s.status)}</td></tr>`).join('');
+}
+function renderSmartSkilled(){
+  document.getElementById('smartSkilledBody').innerHTML=smartSkilled.map(s=>`<tr><td>${s.area}</td><td>${s.monitor}</td><td>${s.evidence}</td><td>${s.framework}</td><td>${statusPill(s.status)}</td></tr>`).join('');
+}
+function renderThirdParty(){
+  document.getElementById('thirdPartyBody').innerHTML=thirdParty.map(t=>`<tr><td>${t.arr}</td><td>${t.risk}</td><td>${t.control}</td><td>${t.owner}</td><td>${fmt(t.review)}</td><td>${statusPill(t.status)}</td></tr>`).join('');
+}
+function renderActions(){
+  document.getElementById('actionList').innerHTML=actions.slice().sort((a,b)=>d(a.date)-d(b.date)).map(a=>{
+    const due=a.status==='Closed'?'Closed '+fmt(a.date):(days(a.date)<0?Math.abs(days(a.date))+' days overdue':'Due '+fmt(a.date));
+    return `<div class="item"><div class="item-top"><div><div class="item-title">${a.title}</div><div class="item-sub">Owner: ${a.owner} · Source: ${a.source}</div></div>${statusPill(a.status)}</div>
+    <div class="item-foot"><span>${due}</span><span>Effectiveness: ${statusPill(a.effectiveness)}</span></div></div>`;
+  }).join('');
+}
+function addAction(){
+  const title=document.getElementById('a-title').value.trim(),owner=document.getElementById('a-owner').value.trim(),date=document.getElementById('a-date').value,source=document.getElementById('a-source').value.trim();
+  if(!title||!date) return alert('Please enter an action and due date.');
+  actions.push({id:Date.now(),title,owner:owner||'Unassigned',date,source:source||'Manual entry',status:'Open',effectiveness:'Pending'});
+  ['a-title','a-owner','a-date','a-source'].forEach(id=>document.getElementById(id).value=''); toggle('form-action'); renderAll();
+}
+function renderRegulatory(){
+  document.getElementById('regList').innerHTML=regulatory.map((r,i)=>`<div class="item"><div class="item-top"><div><div class="item-title">${r.title}</div><div class="item-sub">${r.source}<br>${r.text}</div></div>${statusPill(r.status)}</div>
+  <div class="item-foot"><span>Implementation status</span><select onchange="regulatory[${i}].status=this.value;renderAll()" class="btn"><option ${r.status==='Implemented'?'selected':''}>Implemented</option><option ${r.status==='In Review'?'selected':''}>In Review</option><option ${r.status==='Ongoing'?'selected':''}>Ongoing</option></select></div></div>`).join('');
+}
+function renderEvidence(){
+  const done=evidence.filter(e=>e.done).length;
+  document.getElementById('evidenceLabel').textContent=`${done} of ${evidence.length} assurance evidence items ready`;
+  document.getElementById('evidenceProgress').style.width=Math.round(done/evidence.length*100)+'%';
+  document.getElementById('evidenceList').innerHTML=evidence.map((e,i)=>`<label class="item" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer">
+    <input type="checkbox" ${e.done?'checked':''} onchange="evidence[${i}].done=!evidence[${i}].done;renderAll()" style="margin-top:3px">
+    <div><div class="item-title">${e.label}</div><div class="item-sub">${pill(e.tag,'neutral')} ${e.note||''}</div></div></label>`).join('');
+}
+function renderAll(){
+  renderDashboard();renderObligations();renderRisks();renderAssurance();renderValidation();renderWorkforce();renderStudent();renderSmartSkilled();renderThirdParty();renderActions();renderRegulatory();renderEvidence();
+}
+renderAll();
+</script>
+</body>
+</html>
